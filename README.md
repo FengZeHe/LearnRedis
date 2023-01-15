@@ -1,6 +1,8 @@
 # Redis学习笔记
 
 ## NoSQL概述
+NoSQL的意思是No only Sql,Nosql因为没有IO操作，数据存储在内存中，因此读写速度飞快
+。NoSQL属于非关系型数据库
 
 ## Redis概述＆安装
 
