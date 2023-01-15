@@ -45,3 +45,7 @@ NoSQL的意思是No only Sql,Nosql因为没有IO操作，数据存储在内存�
 ### 缓存预热
 
 ### 缓存降级
+
+## 分布式缓存
+
+## Redis ACL
