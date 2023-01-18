@@ -43,6 +43,26 @@ Redis数据支持push/pop、add/remove操作并且都是原子性的；Redis支�
     docker exec -it my-redis /bin/bash
 
 ### 编译安装
+    //下载源码文件
+    wget https://download.redis.io/redis-stable.tar.gz
+    
+    // 编译redis
+    // 切换到根目录,然后运行make
+    tar -xzvf redis-stable.tar.gz
+    cd redis-stable
+    make
+    
+    // 如果编译成功，则在src目录下多出两个redis二进制文件
+    redis-server : Redis 服务器本身
+    redis-cli : Redis 对话的命令行界面实用程序
+    
+    // 在 /usrl/local/bin 下编译二进制文件
+    make run 
+
+    // 启动redis
+    redis-server
+    
+    
 
 ## Redis五种数据类型
 ### String 字符串
