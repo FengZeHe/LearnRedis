@@ -24,6 +24,23 @@ Redis数据支持push/pop、add/remove操作并且都是原子性的；Redis支�
     systemctl status redis
 
 ### 使用Docker运行
+    // 查看redis版本
+    docker search redis
+    
+    // 获取最新的redis版本
+    docker pull redis:latest
+
+    // 查看本地镜像
+    docker images
+    
+    // 运行redis的docker容器
+    docker run -itd --name my-redis -p 6379:6379 redis
+    
+    // 查看容器运行状态
+    docker ps
+    
+    // 用交互模式进入容器
+    docker exec -it my-redis /bin/bash
 
 ### 编译安装
 
