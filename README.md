@@ -63,9 +63,29 @@ Redis数据支持push/pop、add/remove操作并且都是原子性的；Redis支�
     redis-server
     
     
+## Redis的基本操作
+### Redis的key操作
+1. 查看库当前的key `keys *`
+2. 判断某个key是否存在 `exists key`
+   1. key存在 返回 （integer）1
+   2. key不存在 返回 （integer） 0
+3. 查看key的类型 `type key`
+   1. key存在 返回 具体类型（string）
+   2. key不存在 返回 none 
+4. 删除指定key `del key`
+   1. 删除成功 key 返回 (integer) 1
+   2. 删除失败 key 返回 (integer) 0
+5. 根据value选择非阻塞 `unlink key`
+   1. 删除成功 key 返回 (integer) 1
+   2. 删除失败 key 返回 (integer) 0
+6. 设置key的过期时间 `expire key 10(s)`
+   1. 设置成功 key 返回 (integer) 1
+   2. 设置失败 key 返回 (integer) 0
+
 
 ## Redis五种数据类型
 ### String 字符串
+
 
 ### Set 集合
 
