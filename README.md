@@ -9,6 +9,8 @@ NoSQL的意思是No only Sql,Nosql因为没有IO操作，数据存储在内存�
 Redis是一个开源的key-value数据库。Redis和Memcacahed类似，支持多种数据类型，如string,list,set,zet,hash；
 Redis数据支持push/pop、add/remove操作并且都是原子性的；Redis支持Master-Slave主从同步。
 
+### 什么是二进制安全
+二进制安全的意思就是，只关心二进制化的字符串，不关心具体格式，只会严格的按照二进制的数据存取，不会妄图以某种特殊格式解析数据
 
 ### Redis的安装
 
