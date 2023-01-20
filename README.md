@@ -82,6 +82,11 @@ Redis数据支持push/pop、add/remove操作并且都是原子性的；Redis支�
 6. 设置key的过期时间 `expire key 10(s)`
    1. 设置成功 key 返回 (integer) 1
    2. 设置失败 key 返回 (integer) 0
+7. 获取redis key过期时间
+   1. `ttl key` 返回过期时间的秒数，如果不存在过期时间则返回-1，如果key不存在返回-2。
+   2. `pttl key` 返回过期时间的毫秒数；其余跟`ttl key`相同。
+8. 移除redis key的过期时间
+   1. `persist key` 
 
 
 ## Redis五种数据类型
@@ -97,6 +102,38 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 #### 关于redis string的数据结构
 内部为当前字符串分配空间capacity一般高于实际字符串长度len；当字符串长度小于1M时，扩容会加倍当前空间。
 如果字符串长度超过1M,那么每次扩容只会增加1M空间。
+
+#### Redis String 操作
+##### SET
+* `SET key value` 将字符串值关联到key,set相同的key会覆盖之前的value
+* 可选参数
+  * EX seconds  `SET key value EX seconds` 设置value的同时设置过期时间。
+  * NX  `SET key value NX` 仅当key不存在时才能设置;执行成功返回1，否则返回0。
+    * 设置成功返回OK,失败则返回nil
+
+##### SETNX
+* `SETNX key value`
+* 仅当key不存在时才能设置成功
+
+##### SETEX
+* `SETNX key seconds value`
+* 设置关联value，同时设置key的过期时间。
+
+##### PSETEX
+* `PSETEX key milliseconds value`
+* 设置关联value，同时设置key的过期时间（微秒）
+
+##### GET
+* `GET key`
+* 获取key关联的value值
+
+##### GETSET
+* `GETSET key value`
+* 返回key被设置前的值，将key的值设为value
+
+##### STRLEN
+* `STRLEN key`
+* 返回字符串value的长度
 
 ### Set 集合
 
