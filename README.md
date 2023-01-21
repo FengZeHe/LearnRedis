@@ -135,6 +135,9 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 * `STRLEN key`
 * 返回字符串value的长度
 
+##### APPEND
+
+
 ### Set 集合
 
 ### Hash 哈希
