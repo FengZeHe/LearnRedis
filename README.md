@@ -136,7 +136,40 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 * 返回字符串value的长度
 
 ##### APPEND
+*  `APPEND key value`
+* 若key存在则在关联的值后追加value并返回字符串长度
+* 若key不存在则跟 `SET`关键字作用一样
 
+##### SETRANGE
+* `SETRANGE key offset value`
+* 从偏移量`offset`开始，用value参数覆写key存储的字符串value值
+* 简单来说，偏移到哪位，就将这位的值设置为value
+
+
+##### GETRANGE
+* `GETRANGE key start end`
+* 从key存储的字符串中截取从start到end的字符串
+
+##### MSET
+* `MSET key value key value`
+* 同时设置多个key value
+* 如果某个key已经存在，那么`MSET`将使用新值覆盖旧值
+
+##### MGET
+* `MGET key key key`
+* 同时获取多个key的value
+
+##### INCR 
+* `INCR key`
+* 将key中存储值数字加1（只能用于数字）
+
+##### DECR
+* `DECR key`
+* 将key中存储值数字减1（只能用于数字）
+
+##### INCRBY
+* `INCRBY key value`
+* 自定义增量（可以为负值）
 
 ### Set 集合
 
