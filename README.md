@@ -17,7 +17,7 @@ Redis数据支持push/pop、add/remove操作并且都是原子性的；Redis支�
     sudo apt update
     sudo apt upgrade
     sudo apt install redis-server
-    
+
 检查是否安装成功＆查看运行状态
 
     redis-cli --version
@@ -30,7 +30,7 @@ Redis数据支持push/pop、add/remove操作并且都是原子性的；Redis支�
     
     // 获取最新的redis版本
     docker pull redis:latest
-
+    
     // 查看本地镜像
     docker images
     
@@ -59,11 +59,12 @@ Redis数据支持push/pop、add/remove操作并且都是原子性的；Redis支�
     
     // 在 /usrl/local/bin 下编译二进制文件
     make run 
-
+    
     // 启动redis
     redis-server
-    
-    
+
+
+​    
 ## Redis的基本操作
 ### Redis的key操作
 1. 查看库当前的key `keys *`
@@ -172,6 +173,57 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 * 自定义增量（可以为负值）
 
 ### Set 集合
+* Set 是一个集合
+* Set 对外提供的功能与list类似是一个列表的功能，特殊之处在于set是可以自动重排的。
+* Set有去重的功能
+
+#### Redis SET操作
+##### SADD
+* `SADD key value value value ...`
+* 将一个或多个member元素加入到集合key当中，如member已经存在将被忽略。
+* 若key不存在，则创建一个只包含member元素成员的集合。
+
+##### SMEMBERS 
+* `SMEMBERS key`
+* 查看集合key中所有成员，不存在的key被视为空集合
+* 如查看不存在key k2
+
+` 
+    127.0.0.1:6379> smembers k2
+    (error) WRONGTYPE Operation against a key holding the wrong kind of value
+`
+
+##### SISMEMBER 
+* `SISMEMBER key member`
+* 判断member是否在集合key的成员，若是返回1，否则返回0
+
+##### SPOP
+* `SPOP key`
+* 移除并`随机`返回集合中的一个元素
+
+##### SRANDMEMBER
+* `SRANDMEMBER key [count]`
+* 若不提供参数 `count` ,则返回一个随机元素
+* 若提供参数 `count` 小于集合基数，那么会返回`count`个`随机`集合。
+* 若提供参数 `count` 大于或集合基数，那么返回整个集合。
+* 若提供参数 `count` 为负数，返回数组长度为`count`的绝对值，数组元素可能重复
+
+##### SCARD
+
+* ` SCARD key`
+* 返回集合key中元素的数量
+
+##### SREM
+
+* `SREM key member member member ...`
+* 移除集合key中一个或多个member元素，不存在的member元素将会被忽略
+
+##### SMOVE
+
+* ``
+* 将member元素从source集合移动到destination集合
+
+
 
 ### Hash 哈希
 
