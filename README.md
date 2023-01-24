@@ -220,8 +220,26 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 
 ##### SMOVE
 
-* ``
-* 将member元素从source集合移动到destination集合
+* `SMOVE source destination member`
+* 将`membe`r元素从`source`集合移动到`destination`集合
+* 操作完成后`source`集合`member`就被搬走了（没有了）
+
+##### SUNION
+
+* `SUNION key key ...` 
+* 返回一个集合的全部成员，该集合是所有给定集合的并集
+* 并集就是将两个集合并在一起的集合。
+
+##### SUNIONSTORE
+
+* `SUNIONSTORE destination key key ... `
+* 这个指令类似于`SUNION`，但它将结果保存到`destination`集合
+
+#### SET的数据结构
+
+* SET是通过哈希表实现的
+
+
 
 
 
