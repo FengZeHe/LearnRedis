@@ -241,11 +241,206 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 
 
 
-
-
 ### Hash 哈希
 
+* Hash是`键值对集合`
+* redis Hash是一个`string`类型的`field`和`value`的映射表，Hash特别适用于存储对象。
+
+#### Redis Hash 操作
+
+##### HSET 
+
+* `HSET hash field value field value ...`
+* 将哈希表`hash`中域 `field`的值设置为`value`
+
+##### HSETNX
+
+* `HSETNX hash field value `
+* 仅设置不存在的`field`，否则设置失败
+* 设置成功返回1，失败返回0
+
+##### HGET
+
+* `HGET key field`
+* 获取指定`key`中的`field`关联的值
+
+##### HEXISTS
+
+* `HEXISTS key field`
+* 检查给定域field是否存在
+
+##### HDEL 
+
+* `HDEL key field  field ...`
+* 可以删除单个域、多个域、不存在的键
+* 删除成功返回1，否则返回0 
+
+##### HLEN
+
+* `HLEN key field`
+* 返回哈希表key中域的数量
+
+##### HSTRLEN
+
+* `HSTRLEN key field`
+* 返回哈希表key中，field关联值的字符串长度
+
+##### HINCRBY
+
+* `HINCRBY key field increment`
+* 为哈希表`key`中域给定域field的值加上增量`increment`
+* 只能是`integer`整形，不然报错`(error) ERR hash value is not an integer`
+
+##### HINCRBYFLOAT 
+
+* `HINCRBYFLOAT key field increment`
+* 为哈希表`key`中域`field`加上浮点数增量`increment`
+
+##### HMSET
+
+* `HMSET key field value field value ...`
+* 在哈希表`key`中同时设置多个值
+
+##### HMGET
+
+* `HMGET key field field field ...`
+* 在哈希表中`key`中同时获取多个值
+* 若`field`不存在则返回`nil`
+
+##### HEKYS
+
+* `HKEYS key` 
+* 返回哈希表`key`中所有的域
+
+##### HVALS 
+
+* `HVALS key`
+* 返回哈希表`key`中所有域的值
+
+##### HGETALL
+
+* `HGETALL key`
+* 返回哈希表`key`中所有的域和值
+
+##### HSCAN	
+
+* `HSCAN key cursor [MATCH pattern] [COUNT count]`
+* 字段
+  * cursor 游标
+  * Pattern 匹配的模式
+  * count  指定从数据库力返回多少元素，默认值是0 
+* 返回值：返回的每个元素都是一个元组，每一个元组元素由一个字段(field) 和值（value）组成。
+
+#### 哈希表的数据结构
+
+* 哈希表对应的数据结构有两种，一种是`ziplist`（压缩列表），另一种是`hashtable`（哈希表）
+* 当`field-value`长度较短且个数比较少时，使用`ziplist`，否则使用`hashtable`
+* ziplist：当哈希类型元素个数小于`hash-max-ziplist-entries`配置（默认512个），同时所有值都小于`hash-max-ziplist-value`配置（默认64个字节）时，Redis会使用`ziplist`作为哈希的内部实现`ziplist`使用更加紧凑的结构实现多个元素的连续存储，所以在节省内存方面比`hashtable`更加优秀。
+* hashtable：当哈希类型无法满足`ziplist`的条件时，Redis会使用`hashtable`作为哈希的内部实现。因为此时`ziplist`的读写效率会下降，而`hashtable`的读写时间复杂度为O(1)。
+
+
+
 ### List 列表
+
+- Redis列表是简单的字符串列表，按照插入顺序排序。可以添加一个元素到列表的头部（左边）或尾部（右边）。
+
+- list的底层实现是双向链表，对两端的操作性很强，但随机访问性能较弱。
+
+
+
+
+
+#### Redis的List操作
+
+##### LPUSH /RPUSH
+
+- `LPUSH / RPUSH key value value ...`
+
+* ```
+  127.0.0.1:6379> LPUSH k1 one two three
+  (integer) 3
+  127.0.0.1:6379> LINDEX k1 0 
+  "three"
+  127.0.0.1:6379> LINDEX k1 1
+  "two"
+  127.0.0.1:6379> LINDEX k1 2
+  "one"
+  ```
+
+* 将一个或多个值插入到队列key的表头/尾
+
+##### LPUSHX / RPUSHX
+
+- `LPUSHX / RPUSHX key value value ...`
+- 仅当`key`存在时才能插入`value`
+
+##### LPOP / RPOP
+
+- `LPOP / RPOP key `
+- 从 左边/右边 移除并返回列表key的头元素 / 尾元素
+- 到最后如果元素都没有了，那么key也不存在了
+
+##### RPOPLPUSH 
+
+- `RPOPLPUSH source destination`
+- 命令`RPOPLPUSH`在一个原子时间内执行两个动作
+  1. 将队列source中的尾元素弹出并返回客户端
+  2. 将`source`弹出的元素插入到列表`destination`，作为`destination`列表的头元素
+
+##### LRANGE 
+
+- `LRANGE key start stop`
+- 按照索引获得元素（从左往右）
+- 获取全部元素 `LRANGE key 0 -1`
+
+
+
+##### LREM
+
+- `LREM key count element`
+- 根据参数`count`的值，移除列表中与参数`element`相等的元素
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ### Zset 有序集合
 
