@@ -399,50 +399,162 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 
 - `LREM key count element`
 - 根据参数`count`的值，移除列表中与参数`element`相等的元素
+- `count`的类型
+  - `count > 0` 从表头开始向表尾搜索，移除与value相等的元素，数量为`count`
+  - `count < 0` 从表尾开始向表头搜索，移除与`value`相等的元素，数量为`count`的绝对值
+  - `count = 0` 移除表中所有与`value`相等的值
 
 
+##### LLEN
 
+* `LLEN key`
+* 返回列表key的长度
 
+##### LINDEX
 
+* `LINDEX key index`
+* 返回列表key中，下标为index的元素
 
+##### LINSERT
 
+* `LINSERT key BEFORE|AFTER pivot value`
+* 将值value插入到列表key当中，位于值`pivot`之前或之后
+* 当`pivot`不存在时， 不进行任何操作
+* 当`key`不存在时,不进行任何操作
+* 当`key` 不是列表类型时，返回错误
 
+##### LSET
 
+* `LSET key index value`
+* 将列表`key`下标为`index`元素的值设置为`value`
 
+##### LRANGE
 
+* `LRANGE key start stop`
+* 返回列表`key`中指定区间的元素，区间以偏移量`start`和`stop`指定
+* 下标参数`start`和`stop`都以0为底，既0表示列表的第一个元素，-1表示列表最后的元素,-2表示列表倒数第二位的元素。
 
+##### LTRIM
 
+* `LTRIM key start stop`
+* 只保留列表中从`start`到`stop`下标的元素
 
+##### BLPOP / BRPOP / BRPOPLPUSH
 
+* `BLPOP / BRPOP key timeout`
 
+* `BLPOP`指令会移出并获取列表的第一个元素，若没有元素则会阻塞到`timeout`时间（秒），或期间发现有可弹出元素为止。
 
+* `BRPOP`指令会移出并获取列表的最后一个元素，若没有元素则会阻塞到`timeout`时间（秒），或期间发现有可弹出元素为止。
 
+* `BRPOPLPUSH source destination timeout`
 
+* `BRPOPLPUSH`会弹出最后一个元素，并将元素插入到另一个队列的头部；若没有元素则会阻塞到`timeout`时间（秒），或期间发现有可弹出元素为止。
 
+* ```
+  127.0.0.1:6379> blpop k1 5
+  (nil)
+  (5.01s)
+  ```
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  
 
 ### Zset 有序集合
+
+* Zset与普通集合set非常相似，是一个没有重复元素的字符串集合。
+* 不同之处是有序集合Zset的每个成员都关联了一个评分(score)，这个评分(score)被用来按照最低分到最高分的方式排序集合中的成员。集合中的成员是唯一的，但评分是可以重复的。
+* 因为元素是有序的，所以能根据`评分`或`次序`来获取一个范围的元素。
+
+#### Redis的Zset操作
+
+##### ZADD
+
+* `ZADD key score member`
+* 将一个或多个`member`元素和`score`值加入到有序集`key`当中
+
+##### ZSCORE
+
+* `ZSCORE key member`
+* 返回有序集`key`中，成员`member`的`score`值
+
+##### ZINCRBY
+
+* `zincrby key increment member`
+* 给`zset`中`key`的成员`member`的`socre`加上`increment`
+
+##### ZCARD
+
+* `ZCARD key`
+* 返回有序集合key的基数
+
+##### ZCOUNT
+
+* `ZCOUNT key min max`
+* 返回集合中`score`的值介于min和max之间（含等于）的成员数
+
+##### ZRANGE
+
+* `ZRANGE key start stop`
+* 返回指定区间的成员`member`
+* 成员位置按照`socre`值从小到大排序
+
+##### ZREVRANGE
+
+* `ZREVRANGE key start stop`
+* 返回指定区间的成员`member`
+* 成员位置按照`socre`值从大到小排序
+
+##### ZRANGEBYSOCRE
+
+* `ZRANGEBYSCORE key min max`
+* 返回有序集 key 中，所有 score 值介于 min 和 max 之间(包括等于 min 或 max )的成员。有序集成员按 score 值递增(从小到大)次序排列。
+* 可选参数
+  * WITHSCORES  返回带分数
+  * LIMIT offset count 
+
+##### ZREVRANGEBYSCORE
+
+*  `ZREVRANGEBYSCORE key min max`
+* 返回有序集 key 中， score 值介于 max 和 min 之间(默认包括等于 max 或 min )的所有的成员。有序集成员按 score 值递减(从大到小)的次序排列。
+
+##### ZRANK
+
+* `ZRANK key member`
+* 返回有序集 key 中成员 member 的排名。其中有序集成员按 score 值递增(从小到大)顺序排列。
+
+##### ZREVRANK
+
+* `ZREVRANK key member`
+* 返回有序集 key 中成员 member 的排名。其中有序集成员按 score 值递增(从大到小)顺序排列。
+
+##### ZREM
+
+* `ZREM key member` 
+* 移除有序集合key中的一个或多个成员，不存的成员将直接被忽略
+
+##### ZREMRANGEBYRANK
+
+* `ZREMRANGEBYRANK key start stop`
+* 移除有序集 key 中，指定排名(rank)区间内的所有成员
+
+##### ZREMRANGEBYSCORE
+
+* `ZREMRANGEBYSCORE key min max`
+* 移除有序集 key 中，所有 score 值介于 min 和 max 之间(包括等于 min 或 max )的成员。
+
+##### ZRANGEBYLEX
+
+* `ZRANGEBYLEX key min max`
+* 当有序集合的所有成员都具有相同的分值时， 有序集合的元素会根据成员的字典序（lexicographical ordering）来进行排序， 而这个命令则可以返回给定的有序集合键 key 中， 值介于 min 和 max 之间的成员。
+
+##### ZLEXCOUNT
+
+* `ZLEXCOUNT key min max`
+* 对于一个所有成员的分值都相同的有序集合键 key 来说， 这个命令会返回该集合中， 成员介于 min 和 max 范围内的元素数量。
+
+
+
+
 
 ## Redis 新数据类型
 
