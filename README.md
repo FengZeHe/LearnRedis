@@ -552,15 +552,32 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 * `ZLEXCOUNT key min max`
 * 对于一个所有成员的分值都相同的有序集合键 key 来说， 这个命令会返回该集合中， 成员介于 min 和 max 范围内的元素数量。
 
+## Redis 配置文件
+### Redis配置文件目录
+#### 在ubuntu下
 
+#### 在Docker容器下
+
+### Redis常见配置
+- bind
+- protect mode
+- tcp-backlpg
+- timeout
+- tcp-keepalive
+- supervised auto
+- pidfile /var/run/redis/redis-server.pid 进程号
+- loglevel notice
+- databases 16
+- maxclients 
+- 样本数量
+
+## Redis 订阅与发布
 
 
 
 ## Redis 新数据类型
 
-## Redis 配置文件
 
-## Redis 订阅与发布
 
 ## Go-Redis
 
