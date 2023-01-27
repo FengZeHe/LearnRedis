@@ -560,6 +560,7 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 
 ### Redis常见配置
 - bind
+- port
 - protect mode
 - tcp-backlpg
 - timeout
