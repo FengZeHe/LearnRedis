@@ -556,21 +556,55 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 ### Redis配置文件目录
 #### 在ubuntu下
 
-#### 在Docker容器下
 
 ### Redis常见配置
-- bind
-- port
-- protect mode
+- bind 
+  - 默认情况下，如果没有指定bind，redis会监听主机的所有可用网络接口。通过配置bind可以监听一个或多个网络端口
+  -  bind 192.168.1.100 10.0.0.1   `监听两个IPV4端口`
+  -  bind 127.0.0.1 ::1  `监听本地回环地址IPV4和IPV6`
+- port 
+  - 配置监听端口
+- protected-mode 
+  - 默认开启
+  - 只有当你确认其他主机的客户端连接到Redis(即使没有验证身份)才应该禁用
+  - 配置Redis集群时需要将protected-mode设置为禁用
 - tcp-backlpg
+  - 用于设置linux系统中控制TCP三次握手`已完成连接队列`的长度
+  - 在高并发系统中，需要设置一个较高的`tcp-backlog`来避免客户端访问速度慢的问题
 - timeout
+  - 设置客户端空闲多少秒后关闭连接
+  - 设置0为禁用
 - tcp-keepalive
-- supervised auto
-- pidfile /var/run/redis/redis-server.pid 进程号
-- loglevel notice
-- databases 16
-- maxclients 
-- 样本数量
+  - 设置`tcp-keepalive`的主要用途是心跳检测
+  - 这个选项设置合理值为300
+- supervised 
+  - 设置redis的进程守护
+  - 选项
+    - no  没有监督
+    - upstart  通过将Redis置于SIGSTOP模式来启动信号
+    - systemd signal systemd将READY = 1写入$ NOTIFY_SOCKET
+    - auto  检测upstart或systemd方法基于 UPSTART_JOB或NOTIFY_SOCKET环境变量
+- pidfile 
+  - `/var/run/redis/redis-server.pid`
+  - 如果指定了pid文件，Redis会在启动时将其写入指定的位置
+并在退出时删除它
+  - 如果在配置中没有指定pid文件，那么当服务器运行时，不会创建pid文件。当服务器被守护时，即使没有指定pid文件，也会使用pid文件，默认为"/var/run/redis.pid"
+  - 创建一个pid文件是最好的努力:如果Redis不能创建它，没有什么不好的事情发生，服务器将正常启动和运行。
+  - 注意，在现代Linux系统中，“/run/redis. conf”Pid”更符合要求，应该用它来代替。
+
+- loglevel 
+  - 指定redis服务级别
+  - 选项
+    - debug 大量信息，对开发/测试很有用
+    - verbose 许多很少有用的信息，但不像调试级别那样混乱
+    - notice 稍微有点啰嗦，可能是您在生产中想要的
+    - warning 只记录非常重要/关键的消息
+- databases 
+  - 设置redis默认数据库数量
+- maxclients
+  - 设置最多客户端连接数
+  - 默认是10000  
+
 
 ## Redis 订阅与发布
 
