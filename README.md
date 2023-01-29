@@ -587,7 +587,7 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 - pidfile 
   - `/var/run/redis/redis-server.pid`
   - 如果指定了pid文件，Redis会在启动时将其写入指定的位置
-并在退出时删除它
+  并在退出时删除它
   - 如果在配置中没有指定pid文件，那么当服务器运行时，不会创建pid文件。当服务器被守护时，即使没有指定pid文件，也会使用pid文件，默认为"/var/run/redis.pid"
   - 创建一个pid文件是最好的努力:如果Redis不能创建它，没有什么不好的事情发生，服务器将正常启动和运行。
   - 注意，在现代Linux系统中，“/run/redis. conf”Pid”更符合要求，应该用它来代替。
@@ -607,6 +607,27 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 
 
 ## Redis 订阅与发布
+
+### 概述
+
+Redis发布订阅(pub/sub)是一种消息通信模式，发送这(pub)发送消息，订阅者（sub）接收消息。Redis客户端可以订阅任何数量的频道。
+
+### 实践
+
+1. 打开两个redis客户端，客户端1输入指令 `subscribe channel  channel ...`
+2. 客户端2输入指令 `publish channel message`
+
+```
+127.0.0.1:6379> publish channeltwo "two two "
+(integer) 1
+
+
+1) "message"
+2) "channeltwo"
+3) "two two "
+```
+
+
 
 
 
