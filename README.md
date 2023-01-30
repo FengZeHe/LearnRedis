@@ -630,7 +630,7 @@ Redis发布订阅(pub/sub)是一种消息通信模式，发送这(pub)发送消�
 2) "channel1"
 3) "1 1 1"
 ```
-
+![](./png/pub_sub.gif)
 ## Go-Redis
 ### Github地址： `https://github.com/redis/go-redis`
 ### 概述
