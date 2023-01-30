@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-redis/redis/v8"
+	//	如果是redis6.x选择v8版本，redis7.x选择v9版本
 )
 
 var ctx = context.Background()
