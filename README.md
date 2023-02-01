@@ -865,10 +865,95 @@ AOF（Append Only File），是以日志的形式来记录每个写操作（增�
 - 哨兵模式就是在一主多从的集群环境中，如果主节点宕机，那么将自动在从节点中选出一个新的主节点，并且剩余的从节点（slave）配置文件会自动修改（无需人为干预）
 
 #### 搭建哨兵模式步骤
-- 我这里情况有点特殊，Redis主节点在物理机上运行，剩余两个从节点和三个哨兵使用docker运行
+- 我这里情况有点特殊，Redis主节点在物理机上运行，其余两个从节点和三个哨兵使用docker运行。
+1. 运行主节点
+2. 使用docker搭建从节点
+   1. 修改配置文件
+      ```
+      cd /home 
+      mkdir redis && cd redis
+      mkdir config && cd config
+      touch redis6380.conf redis6381.conf
+      chmod 777 redis*
+    
+      cd /home/redis && mkdir data && cd data
+      mkdir data6380 data6381
+   
+      ```
+      将以下配置分别写入到redis6380.conf和redis6381.conf上,主要是修改`port`
+       ```
+       protected-mode no
+       daemonize no
+       port 6380 
+       slaveof masterip masterport
+       ```
+   2. 使用docker启动两台从机（slave）
+   ```
+   docker run \
+   -p 6380:6380 \
+   --name salve1-redis \
+   -v /home//data6380:/data \
+   -v /home/redis/config/redis6380.conf:/etc/redis/redis.conf \
+   -v /etc/localtime:/etc/localtime \
+   -d redis:6.2 redis-server /etc/redis/redis.conf
 
+    docker run \
+    -p 6381:6381 \
+    --name salve2-redis \
+    -v /home/docker-data/redis6381:/data \
+    -v /home/redis/config/redis6381.conf:/etc/redis/redis.conf \
+    -v /etc/localtime:/etc/localtime \
+    -d redis:6.2 redis-server /etc/redis/redis.conf
+   ```
+3. 使用docker搭建哨兵模式
+   1. 创建配置文件
+   ```
+   cd /home/redis/config
+   touch sentinel-26379.conf sentinel-26380.conf sentinel-26381.conf 
+    ```
+   将以下内容分别改写到相应的配置文件中
+    ```
+    port 26379
+    sentinel monitor mymaster <masterip> <masterport> 2
+    ```
+   
+   2. 使用Docker启动哨兵
+   ```
+   docker run \
+    --name sentinel-26380 \
+    -p 26380:26380 \
+    -v /home/redis/config/sentinel-26380.conf:/etc/redis/sentinel.conf \
+    -v /etc/localtime:/etc/localtime \
+    -d redis:6.2 redis-sentinel /etc/redis/sentinel.conf
+   ```
 
-## 搭建Redis集群
+#### 将master节点关掉，哨兵模式重新选举新的master节点
+
+#### 重启旧的master节点
+
+## 使用Docker-compose搭建Redis集群
+
+```
+cluster-enabled yes
+cluster-config-file nodes-6371.conf
+cluster-node-timeout 5000
+appendonly yes
+protected-mode no
+cluster-announce-ip 192.168.2.36
+cluster-announce-port 6371
+cluster-announce-bus-port 16371
+port 6371
+```
+
+```
+redis-cli --cluster create 192.168.2.36:6371 \
+192.168.2.36:6372 \
+192.168.2.36:6373 \
+192.168.2.36:6374 \
+192.168.2.36:6375 \
+192.168.2.36:6376 \
+--cluster-replicas 1
+```
 
 ## 异常处理
 ### 缓存击穿
