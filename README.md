@@ -221,7 +221,7 @@ String类型是二进制安全性的，意味着redis的string可以包含任何
 ##### SMOVE
 
 * `SMOVE source destination member`
-* 将`membe`r元素从`source`集合移动到`destination`集合
+* 将`member`元素从`source`集合移动到`destination`集合
 * 操作完成后`source`集合`member`就被搬走了（没有了）
 
 ##### SUNION
