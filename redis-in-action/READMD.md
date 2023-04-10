@@ -3,6 +3,7 @@
 - 图书中的github地址：https://github.com/josiahcarlson/redis-in-action/
 - Go代码地址：https://github.com/josiahcarlson/redis-in-action/tree/master/golang
 
+## Chapter1
 ## 做一个对文章投票的网站demo
 - 要构建一个文章投票网站，我们首先要做的就是为了这个网站设置一些数值和限制条件：
 1. 如果一篇文章获得了至少200张支持票（up vote），那么网站就认为这篇文章是一篇有趣的文章；
@@ -25,3 +26,32 @@
 
 - 如何取出评分最高的文章和最新发布的文章
 1. 程序需要先试用`ZREVRANGE`命令取出多个文章ID，然后再对每个文章ID执行一次`HGETALL`命令来取出文章详细信息。
+
+
+## Chapter2
+## 使用Redis构建Web应用
+1. 登录cookie
+2. 购物车cookie
+3. 缓存生成的网页
+4. 缓存数据库行
+5. 分析网页访问记录
+
+
+### Web应用响应请求的步骤：
+1. 服务端对客户端发来的请求(request)进行解析
+2. 请求被转发给一个预定义的处理器(handler)
+3. 处理器可能从数据库中取出数据
+4. 处理器可能会根据取出的数据进行模板渲染(render)
+5. 处理器向客户端返回渲染后的内容作为请求的相应(response)
+
+### 处理登录会话(session)
+- 有两种常见的方法可以将登录信息存储在cookie里卖弄，一是签名(signed)cookie,另一种是令牌(token) cookie。
+#### 签名cookie
+签名cookie通常会存储用户名，可能还有用户ID，用户最后一次登录时间。除了用户的相关信息外，签名cookie还包含一个签名，服务器
+可以用这个签名来验证发浏览器发送的信息是否未经改动。
+
+#### 令牌cookie
+令牌cookie会在cookie里存储一串随机字节作为令牌，服务器可以根据令牌在数据库中查找令牌的拥有者。
+
+
+
