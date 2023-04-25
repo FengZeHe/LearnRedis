@@ -1039,6 +1039,21 @@ redis-cli --cluster create 192.168.2.36:6371 \
 ```
 ![](./png/docker_redis_cluster.png)
 
+##### 随便设个值
+- 使用交互模式进入docker容器
+- `redis-cli -h 127.0.0.1 -p 6371 -c`
+- `redis-cli -h 127.0.0.1 -p 6372 -c`
+```
+127.0.0.1:6371> set k1 v1
+-> Redirected to slot [12706] located at 192.168.2.36:6373
+OK
+
+127.0.0.1:6372> get k1
+-> Redirected to slot [12706] located at 192.168.2.36:6373
+"v1"
+
+```
+
 ##### 要注意的点
 - 使用docker-compose做redis集群要将network设置为`host`
 
