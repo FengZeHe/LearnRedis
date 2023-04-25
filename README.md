@@ -994,9 +994,14 @@ OK
 ![](./png/redis_sentinal_status.png)
 
 #### 将master节点关掉，哨兵模式重新选举新的master节点
-
+能看到6380从节点从`slave`变成了`master`
+![](./png/master_down.png)
 
 #### 重启旧的master节点
+发现6380依旧是master节点，而之前的主节点6379变成了新master的slave
+![](./png/restart_old_master.png)
+
+
 
 ## 使用Docker-compose搭建Redis集群
 
