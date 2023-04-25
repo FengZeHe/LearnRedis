@@ -998,13 +998,20 @@ OK
 ![](./png/master_down.png)
 
 #### 重启旧的master节点
-发现6380依旧是master节点，而之前的主节点6379变成了新master的slave
+发现6380仍然是master节点，而之前的主节点6379变成了新master的slave
 ![](./png/restart_old_master.png)
 
 
+### Redis Cluster集群模式
+- Redis Cluster是一种服务Sharding，从3.0版本开始正式提供。
+- Redis的哨兵模式已经基本可以实现高可用、读写分离，但每台redis的服务器都存储相同数据，很浪费内存。所以redis的cluster集群模式，
+实现了redis的分布式存储，也就是说每个redis节点上存储不同的内容。
+- 每个redis集群节点都需要打开两个TCP连接，一个是给客户端提供服务的端口，如6379；另一个是基于6379+10000的端口，用于集群总线使用。因此要检查防火墙中两个端口都要打开。
+![](./png/redis_cluster.png)
 
-## 使用Docker-compose搭建Redis集群
-
+#### 使用Docker-compose搭建Redis集群
+计划使用6371,6372,6373,6374,6375,6376
+##### redis的配置文件如下
 ```
 cluster-enabled yes
 cluster-config-file nodes-6371.conf
@@ -1016,6 +1023,10 @@ cluster-announce-port 6371
 cluster-announce-bus-port 16371
 port 6371
 ```
+其中 
+- `cluster-announce-ip`是集群节点ip，填写master节点的ip
+- `cluster-announce-port`是集群节点映射端口
+- `cluster-announce-bus-port` 是集群节点总线端口
 
 ```
 redis-cli --cluster create 192.168.2.36:6371 \
@@ -1026,6 +1037,10 @@ redis-cli --cluster create 192.168.2.36:6371 \
 192.168.2.36:6376 \
 --cluster-replicas 1
 ```
+![](./png/docker_redis_cluster.png)
+
+##### 要注意的点
+- 使用docker-compose做redis集群要将network设置为`host`
 
 ## 异常处理
 ### 缓存雪崩
