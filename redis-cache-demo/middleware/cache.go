@@ -16,7 +16,7 @@ func CacheMiddleware(key string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		// 判断一下是哪种key
 		if key == gredis.CACHE_POSTS || key == gredis.CACHE_USERS {
-			if isExists := gredis.ExistUserKey(key); isExists == false {
+			if isExists := gredis.ExistKey(key); isExists == false {
 				c.Next() // 缓存不存在, 查询sql ,写入redis缓存
 			} else {
 				// 取出缓存
@@ -34,7 +34,7 @@ func CacheMiddleware(key string) gin.HandlerFunc {
 		if key == gredis.KeyPostIdSet || key == gredis.KeyUserIdSet {
 			postId := c.Param("postid")
 			currentKey := fmt.Sprintf("%s%s", key, postId)
-			if isExists := gredis.ExistUserKey(currentKey); isExists == false {
+			if isExists := gredis.ExistKey(currentKey); isExists == false {
 				c.Next() // 缓存不存在, 查询sql ,写入redis缓存
 			} else {
 				switch key {
@@ -45,7 +45,5 @@ func CacheMiddleware(key string) gin.HandlerFunc {
 				c.Abort()
 			}
 		}
-
 	}
-
 }

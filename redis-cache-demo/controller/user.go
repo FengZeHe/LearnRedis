@@ -39,7 +39,7 @@ func HandleQueryUserById(c *gin.Context) {
 	var data *model.User
 	id := c.Param("id")
 	key := gredis.GetCacaheKey(id)
-	isExist := gredis.ExistUserKey(key)
+	isExist := gredis.ExistKey(key)
 	var err error
 	if isExist == false {
 		data, err = logic.GetUserById(id)
@@ -67,7 +67,7 @@ func HandleDeleteUserById(c *gin.Context) {
 	id := c.Param("id")
 	fmt.Println(id)
 	key := gredis.GetCacaheKey(id)
-	isExist := gredis.ExistUserKey(key)
+	isExist := gredis.ExistKey(key)
 	if isExist == true {
 		err := gredis.DelCacheUserById(key)
 		if err != nil {
@@ -95,7 +95,7 @@ func HandeUpdateUserById(c *gin.Context) {
 		fmt.Println("logic update user error:", err)
 	}
 	key := gredis.GetCacaheKey(id)
-	isExist := gredis.ExistUserKey(key)
+	isExist := gredis.ExistKey(key)
 	if isExist == true {
 		gredis.DelCacheUserById(key)
 	}

@@ -29,6 +29,7 @@ func InitRedis() (err error) {
 	return nil
 }
 
+// 订阅 channel
 func SubChannel() {
 	sub := rdb.Subscribe(ctx, "post_cache")
 	ch := sub.Channel()
@@ -42,7 +43,7 @@ func SubChannel() {
 }
 
 // 查询用户key是否存在
-func ExistUserKey(key string) bool {
+func ExistKey(key string) bool {
 	n, err := rdb.Exists(ctx, key).Result()
 	if err != nil {
 		log.Println("find exist user Key error :", err)
