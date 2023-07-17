@@ -24,12 +24,22 @@ func main() {
 	}
 
 	r := gin.Default()
+	/*
+		Get Users
+	*/
 	r.GET("/getalluser", middleware.CacheMiddleware(gredis.CACHE_USERS), controller.HandleGetAllUsers)
 	r.GET("/getuserbyid/:id", controller.HandleQueryUserById)
 	r.DELETE("/deluserbyid/:id", controller.HandleDeleteUserById)
 	r.POST("/updateuserbyid", controller.HandeUpdateUserById)
 
+	/*
+		Get Posts
+	*/
 	r.GET("/getallpost", middleware.CacheMiddleware(gredis.CACHE_POSTS), controller.HandleGetAllPost)
+	r.GET("/getpostbyid/:id", controller.HandleGetPostById)
+	r.GET("/getpostbypostid/:postid", middleware.CacheMiddleware(gredis.KeyPostIdSet), controller.HandleGetPostByPostId)
+	r.POST("/updatepostbyid", controller.HandleUpdatePostById)
+	r.DELETE("/deletepostbyid/:id", controller.HandleDeletePostById)
 
 	r.Run(":9001")
 }

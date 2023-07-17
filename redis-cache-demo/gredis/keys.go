@@ -1,7 +1,8 @@
 package gredis
 
 const (
-	KeyUserIdSet = "webfourm:user"
+	KeyUserIdSet = "CACHE/users/"
+	KeyPostIdSet = "CACHE/posts/"
 	CACHE_POSTS  = "CACHE/all-posts"
 	CACHE_USERS  = "CACHE/all-users"
 )
